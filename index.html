@@ -246,7 +246,7 @@
                 </div>
             </div>
             
-            <!-- Risk Type Filter - NEW ADDITION -->
+            <!-- Risk Type Filter - UPDATED WITH HYDROLOGICAL RISK -->
             <div class="filter-section">
                 <h4>🔥 Tipos de Risco</h4>
                 <div class="filter-checkbox" onclick="toggleRiskTypeFilter('dam')">
@@ -257,12 +257,17 @@
                 <div class="filter-checkbox" onclick="toggleRiskTypeFilter('fire')">
                     <input type="checkbox" id="risk_type_fire" checked>
                     <div class="risk-color-box" style="background-color: #e74c3c;"></div>
-                    <span>Risco de Incêndio</span>
+                    <span>Risco de Fogo</span>
                 </div>
                 <div class="filter-checkbox" onclick="toggleRiskTypeFilter('geological')">
                     <input type="checkbox" id="risk_type_geological" checked>
                     <div class="risk-color-box" style="background-color: #8e44ad;"></div>
                     <span>Risco Geológico</span>
+                </div>
+                <div class="filter-checkbox" onclick="toggleRiskTypeFilter('hydrological')">
+                    <input type="checkbox" id="risk_type_hydrological" checked>
+                    <div class="risk-color-box" style="background-color: #2980b9;"></div>
+                    <span>Risco Hidrológico</span>
                 </div>
             </div>
             
@@ -347,7 +352,8 @@
             riskType: {
                 dam: true,
                 fire: true,
-                geological: true
+                geological: true,
+                hydrological: true
             },
             layers: {
                 heritage: true,
@@ -486,7 +492,7 @@
             }
         }
         
-        // Apply Risk Type Filters - NEW FUNCTIONALITY
+        // Apply Risk Type Filters - UPDATED WITH HYDROLOGICAL RISK
         function applyRiskTypeFilters() {
             if (allLayers.heritage) {
                 allLayers.heritage.eachLayer(function(layer) {
@@ -499,9 +505,10 @@
                     if (filters.riskType.dam && damRisk > 0) show = true;
                     if (filters.riskType.fire && fireRisk > 0) show = true;
                     if (filters.riskType.geological && cemRisk > 0) show = true;
+                    if (filters.riskType.hydrological && cemRisk > 0) show = true; // CEMADEN includes hydrological data
                     
                     // If no risk types are selected, show all
-                    if (!filters.riskType.dam && !filters.riskType.fire && !filters.riskType.geological) {
+                    if (!filters.riskType.dam && !filters.riskType.fire && !filters.riskType.geological && !filters.riskType.hydrological) {
                         show = true;
                     }
                     
@@ -1003,11 +1010,11 @@
                         <td>' + (feature.properties['dam_risk_score'] !== null ? feature.properties['dam_risk_score'].toFixed(2) : 'N/A') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Risco de Incêndio</th>\
+                        <th scope="row">Risco de Fogo</th>\
                         <td>' + (feature.properties['fire_risk_score'] !== null ? feature.properties['fire_risk_score'].toFixed(2) : 'N/A') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Risco CEMADEN</th>\
+                        <th scope="row">Risco CEMADEN (Geo/Hidro)</th>\
                         <td>' + (feature.properties['cemaden_risk_score'] !== null ? feature.properties['cemaden_risk_score'].toFixed(2) : 'N/A') + '</td>\
                     </tr>\
                 </table>';
